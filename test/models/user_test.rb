@@ -54,6 +54,13 @@ class UserTest < ActiveSupport::TestCase
     assert_not duplicate_user.valid? #не должно быть дубликатов даже в верхнемо регистре
   end
 
+  test "email addresses should be saved as lower-case" do #адреса электронной почты должны быть сохранены в нижнем регистре
+    mixed_case_email = "Foo@ExAMPle.CoM"
+    @user.email = mixed_case_email #email = Foo@ExAMPle.CoM
+    @user.save
+    assert_equal mixed_case_email.downcase, @user.reload.email #утверждать равенство  между foo@exemple.com (Foo@ExAMPle.CoM) и email из базы данных
+  end  
+
   test "password should have a minimum length" do #пароль должен иметь минимальную длину
     @user.password = @user.password_confirmation = "a" * 5 #если пороль меньше пяти символов то пользователь должен быть не валидным
     assert_not @user.valid?
