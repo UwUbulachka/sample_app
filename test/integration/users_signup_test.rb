@@ -10,6 +10,9 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                         password_confirmation: "bar" } }
     end  
     assert_template 'users/new' # праверка повторного обращения к методу new при ошибочной регистрации
+    assert_select 'div#error_explanation'  # проверка вывода ошибок из стилей scss
+    assert_select 'div.field_with_errors'
+     
   end  
 
   test "valid signup information" do #верная регистрационная информация
@@ -22,5 +25,6 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     follow_redirect! # переадресацию к отображению шаблона 'users/show' после отправки формы
     end
     assert_template 'users/show' # праверка обращения к методу show при удачной регистрации
+    assert_not flash.nil? #коротковременное сообщение не должено быть пустым
   end
 end
