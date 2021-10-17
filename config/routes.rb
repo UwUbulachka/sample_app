@@ -6,6 +6,6 @@ Rails.application.routes.draw do
   get 'signup'  => 'users#new'
   get 'login'   => 'sessions#new' #Страница представления нового сеанса (вход)
   post 'login'   => 'sessions#create' #Создание нового сеанса (вход)
-  destroy 'logout'  => 'sessions#destroy' #Удаление сеанса (выход)
+  delete 'logout'  => 'sessions#destroy' #Удаление сеанса (выход)
   resources :users
 end
