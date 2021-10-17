@@ -1,11 +1,23 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
-  <div class="container">
-    <%= link_to "sample app", root_path, id: "logo" %>
+<div class="container">
+  <%= link_to "sample app", root_path, id: "logo" %>
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "Home", root_path %></li>
         <li><%= link_to "Help", help_path %></li>
-        <li><%= link_to "Log in", '#' %></li>
+        <% if logged_in? %> <!-- если пользователь не пустой -->
+          <li><%= link_to "Users", '#' %></li>        
+            <div class="dropdown">
+              <button onclick="myFunction()" class="dropbtn">Account</button>
+                <div id="myDropdown" class="dropdown-content">         
+                 <li><%= link_to "Profile", current_user %></li><!-- то выводи ссылку на профиль -->
+                 <li><%= link_to "Settings", '#' %></li><!-- выводи ссылку на настройки -->
+                 <li><%= link_to "Log out", logout_path, method: :delete %></li><!-- выводи ссылку выйте -->
+                </div>
+            </div>                  
+        <% else %>
+          <li><%= link_to "Log in", login_path %></li><!-- иначи выводи ссылку на вход -->
+        <% end %>
       </ul>
     </nav>
   </div>
