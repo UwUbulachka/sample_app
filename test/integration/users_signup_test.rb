@@ -25,6 +25,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     follow_redirect! # переадресацию к отображению шаблона 'users/show' после отправки формы
     end
     assert_template 'users/show' # праверка обращения к методу show при удачной регистрации
+    assert is_logged_in? #проверяет вход пользователя 
     assert_not flash.nil? #коротковременное сообщение не должено быть пустым
   end
 end

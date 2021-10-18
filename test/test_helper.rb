@@ -8,4 +8,8 @@ class ActiveSupport::TestCase
   fixtures :all
   include ApplicationHelper #подключем метод full title что бы можно было протестировать
   
+  # Возвращает true, если тестовый пользователь вошел.
+  def is_logged_in?
+    !session[:user_id].nil? #не должен быть пустым текущий пользователь
+  end
 end
