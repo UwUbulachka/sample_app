@@ -7,4 +7,12 @@ class User < ApplicationRecord
                                     uniqueness: {case_sensitive: false} #уникальность чувствительна к регистру ложь
   has_secure_password #имеет надежный пароль
   validates :password, length: {minimum: 6} #минимальная длинна пороля
+
+  # Возвращает дайджест для указанной строки. Хеширует пороль переменной string
+  def User.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ?
+            BCrypt::Engine::MIN_COST :
+            BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end  
 end
