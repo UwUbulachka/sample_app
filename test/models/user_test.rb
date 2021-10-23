@@ -64,5 +64,9 @@ class UserTest < ActiveSupport::TestCase
   test "password should have a minimum length" do #пароль должен иметь минимальную длину
     @user.password = @user.password_confirmation = "a" * 5 #если пороль меньше пяти символов то пользователь должен быть не валидным
     assert_not @user.valid?
-  end  
+  end 
+
+  test "authenticated? should return false for a user with nil digest" do #аутентифицирован? должен возвращать false для пользователя с нулевым дайджестом
+    assert_not @user.authenticated?('') #должен быть не аутенфицирован
+  end 
 end
