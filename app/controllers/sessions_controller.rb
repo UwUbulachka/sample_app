@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(email: params[:session][:email].downcase) # email = params{:sessions{email: @ }} найди пользователя с эти емайлом
+    @user = User.find_by(email: params[:session][:email].downcase) # email = params{:sessions{email: @ }} найди пользователя с эти емайлом (true && true == true)
     if @user && @user.authenticate(params[:session][:password])  #email && password = true пороль должен пренадлежать к емэйлу ползователя
       log_in @user # Осуществить вход пользователя по id (берет id пользователя шифрует)
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user) #Запоминает пользователя по id если флажок равен 1 то запоминай пользователя иначе забывай
