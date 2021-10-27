@@ -19,7 +19,7 @@ module SessionsHelper
       user = User.find_by(id: user_id) #то присвой постоянный id постоянный сеанс cookies
       if user && user.authenticated?(cookies[:remember_token]) #если токен пользовотеля и токен из бд совподают то 
         log_in user #осущиствить вход пользователя
-        @current_user = user # и присвой ему id пользователя
+        @current_user = user # и присвой ему  постоянный id пользователя
       end
     end    
   end 

@@ -7,7 +7,9 @@ class User < ApplicationRecord
                                     format: {with: VALID_EMAIL_REGEX}, #проверка формата 
                                     uniqueness: {case_sensitive: false} #уникальность чувствительна к регистру ложь
   has_secure_password #имеет надежный пароль
-  validates :password, length: {minimum: 6} #минимальная длинна пороля
+  validates :password, length: {minimum: 6}, allow_blank: true #минимальная длинна пороля разрешить пустое значение true
+
+
 
   # Возвращает дайджест для указанной строки. Хеширует пороль переменной string
   def User.digest(string)

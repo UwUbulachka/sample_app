@@ -18,7 +18,22 @@ class UsersController < ApplicationController
     else
     render 'new'  
     end
-  end  
+  end 
+
+  def edit
+    @user = User.find(params[:id])
+  end 
+
+  def update
+     @user = User.find(params[:id]) #найди пользователя по id в бд
+    if @user.update_attributes(user_params) #если пользователь обнавил аттрибуты
+       flash[:success] = "Profile updated" #создания кратковременного сообщения
+       redirect_to @user #переадрисация на обновленного пользователя
+    else
+      render 'edit'
+    end  
+
+  end
 
   private
 

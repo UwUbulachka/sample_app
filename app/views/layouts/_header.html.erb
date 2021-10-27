@@ -11,7 +11,7 @@
               <button onclick="myFunction()" class="dropbtn">Account</button>
                 <div id="myDropdown" class="dropdown-content">         
                  <li><%= link_to "Profile", current_user %></li><!-- то выводи ссылку на профиль -->
-                 <li><%= link_to "Settings", '#' %></li><!-- выводи ссылку на настройки -->
+                 <li><%= link_to "Settings", edit_user_path(current_user) %></li><!-- выводи ссылку на настройки -->
                  <li><%= link_to "Log out", logout_path, method: :delete %></li><!-- выводи ссылку выйте -->
                 </div>
             </div>                  
