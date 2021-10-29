@@ -6,6 +6,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test "unsuccessful edit" do #неудачное редактирование
+    log_in_as(@user)
     get edit_user_path(@user) #посетить страницу пользователя для обновления
     assert_template 'users/edit' #должена открываться вернная страница 
     patch user_path(@user), params: {user: { name: '', # отправить невернную информацию методом patch 
@@ -16,6 +17,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test "successful edit" do
+     log_in_as(@user)
     get edit_user_path(@user) #посетить страницу пользователя для обновления
     assert_template 'users/edit'#должена открываться вернная страница 
     name = "Foo Bar"

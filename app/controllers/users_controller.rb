@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :logged_in_user, only: [:edit, :update] #перед редоктированием пользователь должен подтвердть вход
   
   def show
     @user = User.find(params[:id])
@@ -40,4 +41,12 @@ class UsersController < ApplicationController
   def user_params
    params.require(:user).permit(:name, :email, :password, :password_confirmation) 
   end  
+
+  # Подтверждает вход пользователя.
+  def logged_in_user
+    unless logged_in? #пока пользователь не войдет 
+      flash[:danger] = "Please log in." 
+      redirect_to login_url #перенаправляй на страницу регистрации
+    end
+  end
 end
