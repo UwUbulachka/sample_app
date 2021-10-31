@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     if @user && @user.authenticate(params[:session][:password])  #email && password = true пороль должен пренадлежать к емэйлу ползователя
       log_in @user # Осуществить вход пользователя по id (берет id пользователя шифрует)
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user) #Запоминает пользователя по id если флажок равен 1 то запоминай пользователя иначе забывай
-      redirect_to @user #переадресовать на страницу профиля
+      redirect_back_or @user # Перенаправить по сохраненному адресу или на страницу по умолчанию.
     else
       flash.now[:danger] = 'Invalid email/password combination' # иначе выводи короковременное сообщение об ошибке
       render 'new'

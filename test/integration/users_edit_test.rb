@@ -17,9 +17,9 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   test "successful edit" do
-     log_in_as(@user)
-    get edit_user_path(@user) #посетить страницу пользователя для обновления
-    assert_template 'users/edit'#должена открываться вернная страница 
+    get edit_user_path(@user) #посетить страницу пользователя для обновления не войдя 
+    log_in_as(@user) #войти
+    assert_redirected_to edit_user_path(@user) #перенаправить на страницу редоктирования послед входа
     name = "Foo Bar"
     email = "foo@bar.com"
     patch user_path(@user), params: {user: { name: name, # отправить вернную информацию методом patch 

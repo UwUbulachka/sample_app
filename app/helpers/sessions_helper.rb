@@ -49,6 +49,16 @@ module SessionsHelper
     @current_user = nil  #присваение id nil  
   end
 
+  # Перенаправить по сохраненному адресу или на страницу по умолчанию.
+  def redirect_back_or(default)
+    redirect_to(session[:forwarding_url] || default) #либо переноправь URL запрашиваемой страницы либо переноправь по дефолту
+    session.delete(:forwarding_url) # и удали запомненный url
+  end  
+
+  # Запоминает URL.
+  def store_location
+    session[:forwarding_url] = request.url if request.get? #ключ forwarding_url значение URL запрашиваемой страницы если запрос get
+  end  
 
 end
 

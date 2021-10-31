@@ -1,7 +1,11 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:edit, :update] #перед редоктированием пользователь должен подтвердть вход
+  before_action :logged_in_user, only: [:index, :edit, :update] #перед редоктированием пользователь должен подтвердть вход
   before_action :correct_user, only: [:edit, :update] #перед редоктированием пользователь должен подтвердить права пользователя.
   
+  def index
+    @users = User.all
+  end
+ 
   def show
     @user = User.find(params[:id])
   end
@@ -46,11 +50,13 @@ class UsersController < ApplicationController
   # Подтверждает вход пользователя.
   def logged_in_user
     unless logged_in? #пока пользователь не войдет 
+      store_location #запомини url
       flash[:danger] = "Please log in." 
       redirect_to login_url #перенаправляй на страницу регистрации
     end
   end
 
+  # Подтверждает права пользователя.
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user) #перенаправляй на другую страницу пока пользователь не будет равен текущему пользователю
