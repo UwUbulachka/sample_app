@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :correct_user, only: [:edit, :update] #перед редоктированием пользователь должен подтвердить права пользователя.
   
   def index
-    @users = User.all
+    @users = User.paginate(page: params[:page])
   end
  
   def show
