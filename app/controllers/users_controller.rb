@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update] #перед редоктированием пользователь должен подтвердть вход
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy] #перед редоктированием пользователь должен подтвердть вход
   before_action :correct_user, only: [:edit, :update] #перед редоктированием пользователь должен подтвердить права пользователя.
-  
+  before_action :admin_user, only: :destroy
   def index
     @users = User.paginate(page: params[:page])
   end
@@ -38,9 +38,14 @@ class UsersController < ApplicationController
     else
       render 'edit'
     end  
-
   end
 
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User deleted"
+    redirect_to users_url
+  end 
+    
   private
 
   def user_params
@@ -61,4 +66,8 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user) #перенаправляй на другую страницу пока пользователь не будет равен текущему пользователю
     end
+
+  def admin_user
+    redirect_to(root_url) unless current_user.admin? # перенаправля пользователья на корневой маршрут пока текущий пользователь не будет администратором    
+  end  
 end

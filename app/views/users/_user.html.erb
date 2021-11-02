@@ -1,4 +1,8 @@
 <li>
   <%= gravatar_for user, size: 50 %> <!-- гаватарка для кождго пользователя -->
   <%= link_to user.name, user %><!--  имя с сылкой на пользователя -->
+
+  <% if current_user.admin? && !current_user?(user) %> <!-- если текущий пользователь админ и текущий пользователь не обычный пользователь -->
+    | <%= link_to "delete", user, method: :delete, data: {confirm: "You sure?"} %>
+  <% end %>  
 </li>

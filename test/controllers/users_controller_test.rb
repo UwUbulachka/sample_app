@@ -37,4 +37,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert flash.empty?
     assert_redirected_to root_url
   end 
+
+  test "should redirect destroy when not logged in" do #должен перенаправить destroy, когда вы не вошли в систему
+    assert_no_difference 'User.count' do #не должно быть разницы в кол ве пользователей
+      delete user_url(@user), params: {id: @user}  #попытка удалить пользователя не войдя в систему
+    end #не должно быть разницы в кол ве пользователей
+    assert_redirected_to login_url  #переноправить на страницу входа
+  end 
+
+  test "should redirect destroy when logged in as a non-admin" do #должен перенаправить destroy при входе в систему как неадминистратор
+    log_in_as(@other_user) #войти под другим пользователем
+    assert_no_difference 'User.count' do #не должно быть разницы в кол ве пользователей
+      delete user_url(@user), params: {id: @user} #попытаться удалить польозвателя, без администрации
+    end  #не должно быть разницы в кол ве пользователей
+    assert_redirected_to root_url #переноправить на корнвой мартшрут
+  end 
 end
