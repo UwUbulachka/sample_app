@@ -10,8 +10,10 @@ User.create!(name: "Example User", #создает пользователя
 			 email: "example@railstutorial.org",
 			 password: "foobar",
 			 password_confirmation: "foobar",
-			 admin: true)
-
+			 admin: true,
+			 activated: true,
+			 activated_at: Time.zone.now)
+			
 99.times do |n| 
   name = Faker::Name.name #присваетвает значение имени
   email = "example-#{n+1}@railstutorial.org" #ставив в конце цифру для индивидальной почты
@@ -19,5 +21,7 @@ User.create!(name: "Example User", #создает пользователя
   User.create!(name: name, #создает пользователя
 			   email: email,
 			   password: password,
-			   password_confirmation: password)
+			   password_confirmation: password,
+			   activated: true,
+			   activated_at: Time.zone.now)
 end

@@ -1,6 +1,7 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token
-  before_save { email.downcase! } #до сохранения переведи метод email в нижний ригистр (можно записать так before_save{self.email = email.downcase})
+  attr_accessor :remember_token, :activation_token # разрешить этим атрибутам пользоватья в не модели
+  before_save :downcase_email #до сохранения переведи метод email в нижний ригистр (можно записать так before_save{self.email = email.downcase})
+  before_create :create_activation_digest #до создания сохрани даджест токена для активации пользователя
   validates :name, presence: true, length: {maximum: 50} #проверяет: имя, присутствие: истина
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i #регулярное выражение
   validates :email, presence: true, length: {maximum: 255},
@@ -40,4 +41,17 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil) #присваивая дайджесту значение nil   
   end 
+
+  private 
+
+ #Преобразует адрес электронной почты в нижний регистр.
+  def downcase_email
+    self.email = email.downcase
+  end  
+
+  # Создает и присваивает токен активации и его дайджест.
+  def create_activation_digest
+    self.activation_token = User.new_token #создание токена
+    self.activation_digest = User.digest(activation_token) #хеширование токена
+  end  
 end
