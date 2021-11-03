@@ -67,6 +67,7 @@ class UsersController < ApplicationController
     redirect_to(root_url) unless current_user?(@user) #перенаправляй на другую страницу пока пользователь не будет равен текущему пользователю
     end
 
+  # Подтверждает наличие административных привилегий
   def admin_user
     redirect_to(root_url) unless current_user.admin? # перенаправля пользователья на корневой маршрут пока текущий пользователь не будет администратором    
   end  
