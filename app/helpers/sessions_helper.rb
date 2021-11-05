@@ -22,7 +22,7 @@ module SessionsHelper
       @current_user ||= User.find_by(id: user_id) #то найди его по временному id и верни временный сеанс
     elsif (user_id = cookies.signed[:user_id]) #если id присвоен постоянный id 
       user = User.find_by(id: user_id) #то присвой постоянный id постоянный сеанс cookies
-      if user && user.authenticated?(cookies[:remember_token]) #если токен пользовотеля и токен из бд совподают то 
+      if user && user.authenticated?(:remember, cookies[:remember_token]) #если токен пользовотеля и токен из бд совподают то 
         log_in user #осущиствить вход пользователя
         @current_user = user # и присвой ему  постоянный id пользователя
       end

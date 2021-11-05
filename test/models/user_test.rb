@@ -67,6 +67,6 @@ class UserTest < ActiveSupport::TestCase
   end 
 
   test "authenticated? should return false for a user with nil digest" do #аутентифицирован? должен возвращать false для пользователя с нулевым дайджестом
-    assert_not @user.authenticated?('') #должен быть не аутенфицирован
+    assert_not @user.authenticated?(:remember, '') #должен быть не аутенфицирован
   end 
 end

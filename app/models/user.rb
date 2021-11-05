@@ -32,15 +32,27 @@ class User < ApplicationRecord
   end 
 
   # Возвращает true, если указанный токен соответствует дайджесту.
-  def authenticated?(remember_token)
-    return false if remember_digest.nil? #вернуть false , если дайджест равен nil
-    BCrypt::Password.new(remember_digest).is_password?(remember_token) #хешированный токен из бд должен быть равен токену пользователя (тоже самое BCrypt::Password.new(remember_digest) == remember_token)
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false if digest.nil? #вернуть false , если дайджест равен nil
+    BCrypt::Password.new(digest).is_password?(token) #хешированный токен из бд должен быть равен токену пользователя (тоже самое BCrypt::Password.new(remember_digest) == remember_token)
   end
 
   # Забывает пользователя
   def forget
     update_attribute(:remember_digest, nil) #присваивая дайджесту значение nil   
   end 
+
+  # Активирует учетную запись.
+  def activate
+    update_attribute(:activated, true)# обнови и сделай пользователя активированным
+    update_attribute(:activated_at, Time.zone.now)# запиши время активации
+  end
+
+  # Посылает письмо со ссылкой на страницу активации.
+  def send_activate_email
+    UserMailer.account_activation(self).deliver_now  #отправь пользователю сообщение сейчас
+  end
 
   private 
 
