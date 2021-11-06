@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token, :reset_password # разрешить этим атрибутам пользоватья в не модели
+  attr_accessor :remember_token, :activation_token, :reset_token # разрешить этим атрибутам пользоватья в не модели
   before_save :downcase_email #до сохранения переведи метод email в нижний ригистр (можно записать так before_save{self.email = email.downcase})
   before_create :create_activation_digest #до создания сохрани даджест токена для активации пользователя
   validates :name, presence: true, length: {maximum: 50} #проверяет: имя, присутствие: истина
@@ -58,7 +58,12 @@ class User < ApplicationRecord
   def create_reset_digest
     self.reset_token = User.new_token
     update_attribute(:reset_digest, User.digest(reset_token))
-    update_attribute(:reset_sant_at, Time.zone.now)
+    update_attribute(:reset_sent_at, Time.zone.now)
+  end  
+
+  # Посылает письмо со ссылкой на форму ввода нового пароля.
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
   end  
 
   private 
