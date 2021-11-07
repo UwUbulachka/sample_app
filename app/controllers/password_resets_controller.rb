@@ -1,4 +1,8 @@
 class PasswordResetsController < ApplicationController
+   before_action :get_user, only: [:edit, :update] #перед редоктированием пороля польозвателя должны найти по email
+   before_action :valid_user, only: [:edit, :update] #перед редоктированием пороля убедиться, что пользаватель активирован и аунтафирован
+   before_action :check_expiration, only: [:edit, :update]
+  
   def new
   end
 
@@ -17,4 +21,48 @@ class PasswordResetsController < ApplicationController
     
   def edit
   end
+
+  def update
+    if password_blank?
+      flash.now[:danger] = "Password can't be blank"
+      render 'edit'
+    elsif @user.update_attributes(user_params)
+      log_in @user
+      flash[:success] = "Password has been reset."
+      redirect_to @user
+    else 
+      render 'edit'  
+    end    
+  end  
+
+  private
+
+  def user_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end  
+  
+  # Возвращает true, если пароль пустой
+  def password_blank?
+    params[:user][:password].blank?
+  end
+  
+  # Предварительные фильтры  
+  def get_user
+    @user = User.find_by(email: params[:email])
+  end  
+
+  # Подтверждает допустимость пользователя.
+  def valid_user
+    unless (@user && @user.activated? && @user.authenticated?(:reset, params[:id])) #пользователь существует, учетная запись активирована, подлинность подтверждена по токену сброса из params[:id]
+    redirect_to root_url  
+    end
+  end
+
+  # Проверяет срок действия токена.
+  def check_expiration
+    if @user.password_reset_expired? #время истекло
+      flash[:danger] = "Password reset has expired."
+      redirect_to new_password_reset_url #то все заново
+    end  
+  end  
 end
