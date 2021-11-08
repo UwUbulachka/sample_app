@@ -25,4 +25,8 @@ class MicropostTest < ActiveSupport::TestCase
     @micropost.content = "a" * 141
     assert_not @micropost.valid? 
   end
+
+  test "order should be most recent first" do #заказ должен быть сначала самым последним
+    assert_equal Micropost.first, microposts(:most_recent) #первый пост должен быть равен последнему посту
+  end  
 end
