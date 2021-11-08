@@ -25,3 +25,9 @@ User.create!(name: "Example User", #создает пользователя
 			   activated: true,
 			   activated_at: Time.zone.now)
 end
+
+users = User.order(:created_at).take(6) #возьми по порядку первых 6 пользователей
+50.times do
+	content = Faker::Lorem.sentence(word_count: 5)	
+	users.each { |user| user.microposts.create!(content: content) } #и создай для каждого польозвателя посты по 50 штук
+end
