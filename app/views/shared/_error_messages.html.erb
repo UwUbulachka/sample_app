@@ -1,10 +1,10 @@
-<% if @user.errors.any? %> <!-- если у пользователя не пустая ошибка (есть ошбка) -->
+<% if object.errors.any? %> <!-- если у пользователя не пустая ошибка (есть ошбка) -->
   <div id="error_explanation">
     <div class="alert alert-danger">
-     The form contains <%= pluralize(@user.errors.count, "error") %>. <!-- возврощай кол-во ошибок -->
+     The form contains <%= pluralize(object.errors.count, "error") %>. <!-- возврощай кол-во ошибок -->
     </div>
     <ul>
-	<% @user.errors.full_messages.each do |msg| %> <!-- и перечисли все ошибки -->
+	<% object.errors.full_messages.each do |msg| %> <!-- и перечисли все ошибки -->
 	  <li><%= msg %></li>
     <% end %>
     </ul>
