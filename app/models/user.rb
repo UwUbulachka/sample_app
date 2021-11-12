@@ -72,6 +72,11 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago #Ссылка на сброс пароля отправлена раньше, чем два часа назад
   end
 
+  # Определяет прото-ленту.
+  def feed
+    Micropost.where("user_id = ?", id) #все посты
+  end
+
   private 
 
  #Преобразует адрес электронной почты в нижний регистр.
