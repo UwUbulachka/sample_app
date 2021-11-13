@@ -13,10 +13,19 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_url
   end 
   
-  test "should redirect destroy when not logged in" do 
+  test "should redirect destroy when not logged in" do #должен перенаправить уничтожение, когда вы не авторизуетесь
     assert_no_difference 'Micropost.count' do
       delete micropost_url(@micropost), params: {id: @micropost}
     end
     assert_redirected_to login_url  
+  end
+
+  test "should redirect destroy for wrong micropost" do  #должен перенаправить уничтожение для неправильного микросообщения
+    log_in_as(users(:michael)) #вход
+    micropost = microposts(:ants) #пост другого пользователя
+    assert_no_difference 'Micropost.count' do 
+      delete micropost_url(micropost), params: {id: micropost} #поптыка удалить пост который не пренодлежит пользователю
+    end 
+    assert_redirected_to root_url 
   end 
 end
