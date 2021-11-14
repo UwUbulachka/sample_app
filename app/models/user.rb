@@ -1,5 +1,8 @@
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy #у пользователя много постов если удалить пользователя то удаляться и посты
+  has_many :active_relationships, class_name: "Relationship", #пользователь имеет много взаимотношений
+                                  foreign_key: "follower_id",
+                                  dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token # разрешить этим атрибутам пользоватья в не модели
   before_save :downcase_email #до сохранения переведи метод email в нижний ригистр (можно записать так before_save{self.email = email.downcase})
   before_create :create_activation_digest #до создания сохрани даджест токена для активации пользователя
