@@ -83,7 +83,8 @@ class UserTest < ActiveSupport::TestCase
     archer = users(:archer)
     assert_not michael.following?(archer) #майкал не должен слелить за Арчером
     michael.follow(archer) # Майкал подписался(следует) на Арчера
-    assert michael.following?(archer)
+    assert michael.following?(archer) #Майкал должен быть подиписан на арчера
+    assert archer.followers.include?(michael)#У арчера должен быть подписчик майкл
     michael.unfollow(archer) #майкал отписался от арчера
     assert_not michael.following?(archer)
   end  
