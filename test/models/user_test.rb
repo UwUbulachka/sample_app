@@ -76,5 +76,15 @@ class UserTest < ActiveSupport::TestCase
     assert_difference 'Micropost.count', -1 do #после удаления пользователя постов должно быть -1
     @user.destroy
     end  
+  end
+
+  test "should follow and unfollow a user" do 
+    michael = users(:michael)
+    archer = users(:archer)
+    assert_not michael.following?(archer) #майкал не должен слелить за Арчером
+    michael.follow(archer) # Майкал подписался(следует) на Арчера
+    assert michael.following?(archer)
+    michael.unfollow(archer) #майкал отписался от арчера
+    assert_not michael.following?(archer)
   end  
 end

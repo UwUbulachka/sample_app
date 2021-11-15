@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :active_relationships, class_name: "Relationship", #пользователь имеет много взаимотношений
                                   foreign_key: "follower_id",
                                   dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed #пользователь имеет много читаемых, через active_relationships, источник: читаемый
   attr_accessor :remember_token, :activation_token, :reset_token # разрешить этим атрибутам пользоватья в не модели
   before_save :downcase_email #до сохранения переведи метод email в нижний ригистр (можно записать так before_save{self.email = email.downcase})
   before_create :create_activation_digest #до создания сохрани даджест токена для активации пользователя
@@ -78,6 +79,20 @@ class User < ApplicationRecord
   # Определяет прото-ленту.
   def feed
     Micropost.where("user_id = ?", id) #все посты
+  end
+
+  # Выполняет подписку на сообщения пользователя.
+  def follow(other_user) #подписан на другого пользователя
+    active_relationships.create(followed_id: other_user.id) #создай взаимосвязь между читаемым и читающим 
+  end
+
+  # Отменяет подписку на сообщения пользователя.
+  def unfollow(other_user)#отпсаться от пользователя
+    active_relationships.find_by(followed_id: other_user.id).destroy #найди взаимосвязь между читаемым и читащим и удали
+  end
+
+  def following?(other_user)
+    following.include?(other_user) #читающий подписан на читаемого
   end
 
   private 
