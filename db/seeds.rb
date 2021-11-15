@@ -1,11 +1,4 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-
+# Пользователи
 User.create!(name: "Example User", #создает пользователя
 			 email: "example@railstutorial.org",
 			 password: "foobar",
@@ -26,8 +19,18 @@ User.create!(name: "Example User", #создает пользователя
 			   activated_at: Time.zone.now)
 end
 
+# Микросообщения
 users = User.order(:created_at).take(6) #возьми по порядку первых 6 пользователей
 50.times do
 	content = Faker::Lorem.sentence(word_count: 5)	
 	users.each { |user| user.microposts.create!(content: content) } #и создай для каждого польозвателя посты по 50 штук
 end
+
+# Взаимоотношения следования
+
+users = User.all  
+user = users.first
+following = users[2..50] #читающих 
+followers = users[3..40] #подписчиков
+following.each { |followed| user.follow(followed) } #пользователь подписывается на читаемых
+followers.each { |follower| follower.follow(user) } #пользователь имеет подписчиков (подпсчика подписаны на пользователя)
