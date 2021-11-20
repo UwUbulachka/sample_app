@@ -80,9 +80,9 @@ class User < ApplicationRecord
     reset_sent_at < 2.hours.ago #Ссылка на сброс пароля отправлена раньше, чем два часа назад
   end
 
-  # Определяет прото-ленту.
+  # Возвращает ленту сообщений.
   def feed
-    Micropost.where("user_id = ?", id) #все посты
+    Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id) #все посты
   end
 
   # Выполняет подписку на сообщения пользователя.
