@@ -87,5 +87,23 @@ class UserTest < ActiveSupport::TestCase
     assert archer.followers.include?(michael)#У арчера должен быть подписчик майкл
     michael.unfollow(archer) #майкал отписался от арчера
     assert_not michael.following?(archer)
-  end  
+  end 
+
+   test "feed should have the right posts" do
+     michael = users(:michael)
+     archer = users(:archer)
+     lana = users(:lana)
+     # Сообщения читаемого пользователя
+     lana.microposts.each do |post_following| #пройтись по каждому посту ланы
+       assert michael.feed.include?(post_following) #майкл должен включать каждый пост ланы
+     end
+     # Собственные сообщения
+     michael.microposts.each do |post_self|
+       assert michael.feed.include?(post_self)
+     end 
+     # Сообщения нечитаемого пользователя
+     archer.microposts.each do |post_unfollowed|
+       assert_not michael.feed.include?(post_unfollowed)
+     end 
+   end
 end
